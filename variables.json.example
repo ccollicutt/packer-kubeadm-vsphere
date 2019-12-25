@@ -1,0 +1,13 @@
+{
+    "vcenter_server":"<vcenter>",
+    "username":"<administrator@vsphere.local>",
+    "template_name": "<template name>",
+    "password":"<VMware123!>",
+    "datastore":"<vsanDatastore>",
+    "folder": "<_Templates>",
+    "cluster": "<Cluster>",
+    "network": "<VM Network>",
+    "ssh_username": "ubuntu",
+    "ssh_password": "ubuntu",
+    "ubuntu_ssh_key": "<SSH key>"
+}

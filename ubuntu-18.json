@@ -1,0 +1,79 @@
+{
+    "builders": [
+      {
+        "type": "vsphere-iso",
+  
+        "vcenter_server":      "{{user `vcenter_server`}}",
+        "username":            "{{user `username`}}",
+        "password":            "{{user `password`}}",
+        "insecure_connection": "true",
+  
+        "vm_name": "{{ user `template_name` }}" ,
+        "datastore": "{{user `datastore`}}",
+        "folder": "{{user `folder`}}",
+        "host":     "{{user `host`}}",
+        "convert_to_template": "true",
+        "cluster": "{{user `cluster`}}",
+        "network": "{{user `network`}}",
+        "boot_order": "disk,cdrom",
+  
+        "guest_os_type": "ubuntu64Guest",
+  
+        "ssh_username": "{{user `ssh_username`}}",
+        "ssh_password": "{{user `ssh_password`}}",
+  
+        "CPUs":             2,
+        "RAM":              4096,
+        "RAM_reserve_all": true,
+  
+        "disk_controller_type":  "pvscsi",
+        "disk_size":        61440,
+        "disk_thin_provisioned": true,
+  
+        "network_card": "vmxnet3",
+  
+        "iso_urls": "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.3-server-amd64.iso",
+        "iso_checksum": "7d8e0055d663bffa27c1718685085626cb59346e7626ba3d3f476322271f573e",
+        "iso_checksum_type": "sha256",
+
+        "floppy_files": [
+          "./preseed.cfg"
+        ],
+        "boot_command": [
+          "<enter><wait><f6><wait><esc><wait>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs>",
+          "/install/vmlinuz",
+          " initrd=/install/initrd.gz",
+          " priority=critical",
+          " locale=en_US",
+          " file=/media/preseed.cfg",
+          "<enter>"
+        ]
+      }
+    ],
+
+        "provisioners": [{
+        "environment_vars": [
+            "DEBIAN_FRONTEND=noninteractive",
+            "UBUNTU_SSH_KEY={{ user `ubuntu_ssh_key` }}"
+        ],
+        "execute_command": "echo 'ubuntu' | sudo -S env {{ .Vars }} {{ .Path }}",
+        "expect_disconnect": true,
+        "scripts": [
+            "scripts/install-ssh-key.sh",
+            "scripts/setup-for-vsphere-kubeadm.sh",
+            "scripts/install-docker-for-kubeadm.sh",
+            "scripts/install-kubeadm.sh",
+            "scripts/cleanup.sh"
+        ],
+        "type": "shell"
+    }]
+  }
