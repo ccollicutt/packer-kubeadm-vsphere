@@ -6,9 +6,9 @@ This is mostly based on [Myles Gray's work](https://blah.cloud/kubernetes/creati
 
 I also borrowed most of the packer config from a github repository that I can no longer find.
 
-## Versions and Depdencies
+## Versions and Dependencies
 
-*NOTE: You have to use an older version of packer with `packer-builder-vsphere-iso.linux`.
+*NOTE: You have to use an older version of packer with `packer-builder-vsphere-iso.linux`.*
 
 | Component     | Version       |
 | ------------- |:-------------:|
@@ -17,8 +17,10 @@ I also borrowed most of the packer config from a github repository that I can no
 | Ubuntu        | 18.04         |
 | Packer        | 1.3.5         |
 | vsphere-iso   | latest        |
+| Powershell    | 6.2.3         |
+| Govc          | 0.21.0        |
 
-## Install vsphere-iso
+### vsphere-iso
 
 Install the latest [vsphere-iso](https://github.com/jetbrains-infra/packer-builder-vsphere/releases) release and ensure the binary is available on your path.
 
@@ -66,9 +68,9 @@ Now we can create vms from that template and spec.
 *NOTE: This requires govc is installed and configured.*
 
 ```
-govc vm.clone -vm test-kubeadm-template -customization=Ubuntu k8s-controller
-govc vm.clone -vm test-kubeadm-template -customization=Ubuntu k8s-node-1
-govc vm.clone -vm test-kubeadm-template -customization=Ubuntu k8s-node-2
+govc vm.clone -vm <template name> -customization=Ubuntu k8s-controller
+govc vm.clone -vm <template name> -customization=Ubuntu k8s-node-1
+govc vm.clone -vm <template name> -customization=Ubuntu k8s-node-2
 ```
 
 Find all all nodes.
@@ -80,7 +82,7 @@ $ govc find / -type m -name 'k8s*'
 /Datacenter/vm/k8s-node-2
 ```
 
-Move them into a folder.
+Optionally move them into a folder.
 
 ```
 govc folder.create /Datacenter/vm/k8s-vcp
@@ -97,3 +99,7 @@ echo $K8S_CONTROLLER
 echo $K8S_NODE_1
 echo $K8S_NODE_2
 ```
+
+## Deploy K8S, CPI and CSI
+
+At this point you should be at the *Installing the Kubernetes master node(s)* section in this [document](https://cloud-provider-vsphere.sigs.k8s.io/tutorials/kubernetes-on-vsphere-with-kubeadm.html). There's still a fair bit more to do... :)
