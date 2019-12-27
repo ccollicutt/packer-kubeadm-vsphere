@@ -103,3 +103,7 @@ echo $K8S_NODE_2
 ## Deploy K8S, CPI and CSI
 
 At this point you should be at the *Installing the Kubernetes master node(s)* section in this [document](https://cloud-provider-vsphere.sigs.k8s.io/tutorials/kubernetes-on-vsphere-with-kubeadm.html). There's still a fair bit more to do... :)
+
+Once you complete everything in the above tutorial, you should be able to deploy CNS volumes.
+
+![vSAN CNS volumes](img/vsan-cns.jpg)
