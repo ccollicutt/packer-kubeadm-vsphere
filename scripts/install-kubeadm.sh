@@ -11,5 +11,8 @@ apt-get update
 apt-get install -y kubelet=1.17.0-00 kubeadm=1.17.0-00 kubectl=1.17.0-00
 apt-mark hold kubelet kubeadm kubectl
 
+# download all the images
+kubeadm config images pull
+
 # For flannel - https://cloud-provider-vsphere.sigs.k8s.io/tutorials/kubernetes-on-vsphere-with-kubeadm.html
 sysctl net.bridge.bridge-nf-call-iptables=1

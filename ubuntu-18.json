@@ -63,7 +63,15 @@
         "provisioners": [{
         "environment_vars": [
             "DEBIAN_FRONTEND=noninteractive",
-            "UBUNTU_SSH_KEY={{ user `ubuntu_ssh_key` }}"
+            "UBUNTU_SSH_KEY={{ user `ubuntu_ssh_key` }}",
+            "VCENTER_USER={{ user `username` }}",
+            "VCENTER_PASSWORD={{ user `password` }}",
+            "VCENTER_DATASTORE={{ user `datastore` }}",
+            "VCENTER_IP={{ user `vcenter_server` }}",
+            "VCENTER_CLUSTER={{ user `cluster` }}",
+            "VCENTER_FOLDER={{ user `folder` }}",
+            "VCENTER_NETWORK={{ user `network` }}",
+            "VCENTER_DATACENTER={{ user `datacenter` }}"
         ],
         "execute_command": "echo 'ubuntu' | sudo -S env {{ .Vars }} {{ .Path }}",
         "expect_disconnect": true,
@@ -72,6 +80,7 @@
             "scripts/setup-for-vsphere-kubeadm.sh",
             "scripts/install-docker-for-kubeadm.sh",
             "scripts/install-kubeadm.sh",
+            "scripts/configure-kubeadm.sh",
             "scripts/cleanup.sh"
         ],
         "type": "shell"

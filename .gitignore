@@ -1,2 +1,4 @@
 variables.json
 packer_cache
+rsync.sh
+README_FULL.md

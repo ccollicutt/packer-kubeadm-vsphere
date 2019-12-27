@@ -1,10 +1,31 @@
 # Packer Kubeadm Vsphere
 
-This is packer configuration to build a vm template to run kubeadm in a vsphere environment. You can use packer to build a template and then use that template to create kubernetetes nodes in vsphere. All it really does is build the template, install docker and kubeadm.
+This is packer configuration to build a vm template to run kubeadm in a vsphere environment, mostly for testing the Cloud Provider Interface (CPI) and Container Storage Interface (CSI). You can use packer to build a template and then use that template to create kubernetetes nodes in vsphere.
 
 This is mostly based on [Myles Gray's work](https://blah.cloud/kubernetes/creating-an-ubuntu-18-04-lts-cloud-image-for-cloning-on-vmware/).
 
 I also borrowed most of the packer config from a github repository that I can no longer find.
+
+## Versions and Depdencies
+
+*NOTE: You have to use an older version of packer with `packer-builder-vsphere-iso.linux`.
+
+| Component     | Version       |
+| ------------- |:-------------:|
+| Docker        | 19.03         |
+| Kubernetes    | 1.17.0        |
+| Ubuntu        | 18.04         |
+| Packer        | 1.3.5         |
+| vsphere-iso   | latest        |
+
+## Install vsphere-iso
+
+Install the latest [vsphere-iso](https://github.com/jetbrains-infra/packer-builder-vsphere/releases) release and ensure the binary is available on your path.
+
+```
+$ which packer-builder-vsphere-iso.linux
+~/bin/packer-builder-vsphere-iso.linux
+```
 
 ## Build Template in vSphere
 
@@ -13,7 +34,7 @@ Use the sample variables file.
 *NOTE: The ubuntu user and password are hardcoded into the preseed file so don't change those unless you want to also change the preseed file.*
 
 ```
-cp variables.json.sample variables.json
+cp variables.json.example variables.json
 ```
 
 Edit that file and add vcenter information and a public key.
@@ -48,4 +69,31 @@ Now we can create vms from that template and spec.
 govc vm.clone -vm test-kubeadm-template -customization=Ubuntu k8s-controller
 govc vm.clone -vm test-kubeadm-template -customization=Ubuntu k8s-node-1
 govc vm.clone -vm test-kubeadm-template -customization=Ubuntu k8s-node-2
+```
+
+Find all all nodes.
+
+```
+$ govc find / -type m -name 'k8s*'
+/Datacenter/vm/k8s-controller
+/Datacenter/vm/k8s-node-1
+/Datacenter/vm/k8s-node-2
+```
+
+Move them into a folder.
+
+```
+govc folder.create /Datacenter/vm/k8s-vcp
+govc object.mv /Datacenter/vm/k8s-\* /Datacenter/vm/k8s-vcp
+```
+
+Get the IPs for the nodes.
+
+```
+export K8S_CONTROLLER=`govc vm.ip k8s-controller`
+export K8S_NODE_1=`govc vm.ip k8s-node-1`
+export K8S_NODE_2=`govc vm.ip k8s-node-2`
+echo $K8S_CONTROLLER
+echo $K8S_NODE_1
+echo $K8S_NODE_2
 ```
