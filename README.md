@@ -12,6 +12,7 @@ I also borrowed most of the packer config from a github repository that I can no
 
 | Component     | Version       |
 | ------------- |:-------------:|
+| vSphere       | 6.7U3         |
 | Docker        | 19.03         |
 | Kubernetes    | 1.17.0        |
 | Ubuntu        | 18.04         |
