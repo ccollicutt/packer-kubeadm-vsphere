@@ -2,9 +2,9 @@
 
 This is packer configuration to build a vm template to run kubeadm in a vsphere environment, mostly for testing the Cloud Provider Interface (CPI) and Container Storage Interface (CSI). You can use packer to build a template and then use that template to create kubernetetes nodes in vsphere.
 
-This is mostly based on [Myles Gray's work](https://blah.cloud/kubernetes/creating-an-ubuntu-18-04-lts-cloud-image-for-cloning-on-vmware/).
+This is mostly based on [Myles Gray's work](https://blah.cloud/kubernetes/creating-an-ubuntu-18-04-lts-cloud-image-for-cloning-on-vmware/) as well as the [K8S on vSphere with Kubeadm tutorial from the Cloud Provider vSphere SIG](https://cloud-provider-vsphere.sigs.k8s.io/tutorials/kubernetes-on-vsphere-with-kubeadm.html)
 
-I also borrowed most of the packer config from a github repository that I can no longer find.
+I also borrowed most of the packer config from a github repository that I can no longer find. I'll update this readme when I track it down again. Apologies.
 
 ## Versions and Dependencies
 
@@ -49,7 +49,7 @@ packer build --force -var-file variables.json ubuntu-18.json
 
 Once that completes there should be a new template that can be used to build k8s nodes.
 
-## Built an OS Customization Spec
+## Creaet an OS Customization Spec
 
 Currently it seems we need to run some powershell to get a customized vm spec. We are using this instead of something like cloud-init.
 
